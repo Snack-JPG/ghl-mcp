@@ -11,8 +11,6 @@ const SearchOpportunitiesInput = z.object({
   status: z.string().optional().describe("Optional opportunity status filter such as open, won, lost, or abandoned."),
   contactId: z.string().optional().describe("Optional contact ID to restrict opportunities to one contact."),
   assignedTo: z.string().optional().describe("Optional assigned user ID."),
-  limit: z.number().int().min(1).max(100).default(20).describe("Maximum number of opportunities to return."),
-  offset: z.number().int().min(0).default(0).describe("Pagination offset for opportunities."),
 });
 
 const GetOpportunityInput = z.object({
@@ -52,8 +50,6 @@ const UpdateOpportunityStatusInput = z.object({
 });
 
 const ListPipelinesInput = z.object({
-  limit: z.number().int().min(1).max(100).default(100).describe("Maximum number of pipelines to return."),
-  offset: z.number().int().min(0).default(0).describe("Pagination offset for pipelines."),
 });
 
 export function registerOpportunityTools(server: McpServer, client: GhlClient) {
@@ -131,9 +127,9 @@ export function registerOpportunityTools(server: McpServer, client: GhlClient) {
     "list_pipelines",
     "List GoHighLevel pipelines and include their stages.",
     ListPipelinesInput.shape,
-    async ({ limit, offset }) =>
+    async (_params) =>
       withToolErrorHandling("list pipelines", async () => {
-      const result = await client.listPipelines({ limit, offset });
+      const result = await client.listPipelines({});
       const pipelines = (result as { pipelines?: unknown[] }).pipelines ?? [];
       return formatToolResult(
         `Retrieved ${pipelines.length} pipeline${pipelines.length === 1 ? "" : "s"} with stages.`,

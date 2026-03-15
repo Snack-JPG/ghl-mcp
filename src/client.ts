@@ -56,11 +56,11 @@ export class GhlClient {
   }
 
   public async updateContact(contactId: string, body: Record<string, unknown>) {
-    return this.request("PUT", `/contacts/${contactId}`, { body });
+    return this.request("PUT", `/contacts/${contactId}`, { body, includeLocationId: false });
   }
 
   public async deleteContact(contactId: string) {
-    return this.request("DELETE", `/contacts/${contactId}`);
+    return this.request("DELETE", `/contacts/${contactId}`, { includeLocationId: false });
   }
 
   public async advancedSearchContacts(body: Record<string, unknown>) {
@@ -74,12 +74,14 @@ export class GhlClient {
   public async addContactTags(contactId: string, tags: string[]) {
     return this.request("POST", `/contacts/${contactId}/tags`, {
       body: { tags },
+      includeLocationId: false,
     });
   }
 
   public async removeContactTags(contactId: string, tags: string[]) {
     return this.request("DELETE", `/contacts/${contactId}/tags`, {
       body: { tags },
+      includeLocationId: false,
     });
   }
 
@@ -87,16 +89,18 @@ export class GhlClient {
     return this.request<{ notes?: ContactNote[] }>(
       "GET",
       `/contacts/${contactId}/notes`,
-      { query },
+      { query, includeLocationId: false },
     );
   }
 
   public async createContactNote(contactId: string, body: Record<string, unknown>) {
-    return this.request("POST", `/contacts/${contactId}/notes`, { body });
+    return this.request("POST", `/contacts/${contactId}/notes`, { body, includeLocationId: false });
   }
 
   public async searchOpportunities(params: Record<string, unknown>) {
-    return this.request("GET", "/opportunities/search", { query: params });
+    // GHL opportunities search uses location_id (snake_case) instead of locationId
+    const query = { ...params, location_id: params.location_id ?? this.locationId };
+    return this.request("GET", "/opportunities/search", { query, includeLocationId: false });
   }
 
   public async getOpportunity(opportunityId: string) {
@@ -108,18 +112,18 @@ export class GhlClient {
   }
 
   public async updateOpportunity(opportunityId: string, body: Record<string, unknown>) {
-    return this.request("PUT", `/opportunities/${opportunityId}`, { body });
+    return this.request("PUT", `/opportunities/${opportunityId}`, { body, includeLocationId: false });
   }
 
   public async deleteOpportunity(opportunityId: string) {
-    return this.request("DELETE", `/opportunities/${opportunityId}`);
+    return this.request("DELETE", `/opportunities/${opportunityId}`, { includeLocationId: false });
   }
 
   public async updateOpportunityStatus(
     opportunityId: string,
     body: Record<string, unknown>,
   ) {
-    return this.request("PUT", `/opportunities/${opportunityId}/status`, { body });
+    return this.request("PUT", `/opportunities/${opportunityId}/status`, { body, includeLocationId: false });
   }
 
   public async listPipelines(query?: Record<string, unknown>) {
@@ -172,7 +176,7 @@ export class GhlClient {
     conversationId: string,
     body: Record<string, unknown>,
   ) {
-    return this.request("PUT", `/conversations/${conversationId}`, { body });
+    return this.request("PUT", `/conversations/${conversationId}`, { body, includeLocationId: false });
   }
 
   public async sendMessage(body: Record<string, unknown>) {
@@ -207,7 +211,7 @@ export class GhlClient {
   }
 
   public async updateEvent(eventId: string, body: Record<string, unknown>) {
-    return this.request("PUT", `/calendars/events/${eventId}`, { body });
+    return this.request("PUT", `/calendars/events/${eventId}`, { body, includeLocationId: false });
   }
 
   public async getAvailableSlots(query: Record<string, unknown>) {
@@ -265,7 +269,7 @@ export class GhlClient {
         "Content-Type": "application/json",
         Version: "2021-07-28",
       },
-      body: options.body === undefined ? null : JSON.stringify(this.withLocationId(options.body)),
+      body: options.body === undefined ? null : JSON.stringify(this.withLocationId(options.body, options.includeLocationId !== false)),
     });
 
     const responseText = await response.text();

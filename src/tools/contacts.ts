@@ -8,7 +8,8 @@ const SearchContactsInput = z.object({
   query: z.string().optional().describe("Search text for name, email, phone, or general contact matching."),
   tag: z.string().optional().describe("Optional tag name to filter contacts by."),
   limit: z.number().int().min(1).max(100).default(20).describe("Maximum number of contacts to return."),
-  offset: z.number().int().min(0).default(0).describe("Pagination offset for the contact list."),
+  startAfterId: z.string().optional().describe("Contact ID to start after for cursor-based pagination. Use the startAfterId from a previous response to get the next page."),
+  startAfter: z.number().optional().describe("Timestamp to start after for cursor-based pagination. Use the startAfter value from a previous response."),
   filters: z.array(z.record(z.unknown())).optional().describe("Optional advanced search filters. When provided, the tool uses the advanced contact search endpoint."),
 });
 
@@ -56,8 +57,7 @@ const UpdateContactTagsInput = z.object({
 
 const GetContactNotesInput = z.object({
   contactId: z.string().min(1).describe("The GoHighLevel contact ID whose notes should be listed."),
-  limit: z.number().int().min(1).max(100).default(20).describe("Maximum number of notes to return."),
-  offset: z.number().int().min(0).default(0).describe("Pagination offset for notes."),
+
 });
 
 const CreateContactNoteInput = z.object({
@@ -73,14 +73,14 @@ export function registerContactTools(server: McpServer, client: GhlClient) {
     SearchContactsInput.shape,
     async (params) =>
       withToolErrorHandling("search contacts", async () => {
-      const result = params.filters?.length
+      const { filters, ...searchParams } = params;
+      const result = filters?.length
         ? await client.advancedSearchContacts({
-            filters: params.filters,
-            limit: params.limit,
-            offset: params.offset,
-            query: params.query,
+            filters,
+            limit: searchParams.limit,
+            query: searchParams.query,
           })
-        : await client.searchContacts(params);
+        : await client.searchContacts(searchParams);
 
       const contacts = (result as { contacts?: unknown[] }).contacts ?? [];
       return formatToolResult(
@@ -160,9 +160,9 @@ export function registerContactTools(server: McpServer, client: GhlClient) {
     "get_contact_notes",
     "List notes attached to a GoHighLevel contact.",
     GetContactNotesInput.shape,
-    async ({ contactId, limit, offset }) =>
+    async ({ contactId }) =>
       withToolErrorHandling(`list notes for contact ${contactId}`, async () => {
-      const result = await client.getContactNotes(contactId, { limit, offset });
+      const result = await client.getContactNotes(contactId);
       const notes = result.notes ?? [];
       return formatToolResult(
         `Retrieved ${notes.length} note${notes.length === 1 ? "" : "s"} for contact ${contactId}.`,

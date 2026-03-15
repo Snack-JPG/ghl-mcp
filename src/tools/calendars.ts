@@ -5,8 +5,6 @@ import { GhlClient } from "../client.js";
 import { formatToolResult, withToolErrorHandling } from "../types.js";
 
 const ListCalendarsInput = z.object({
-  limit: z.number().int().min(1).max(100).default(100).describe("Maximum number of calendars to return."),
-  offset: z.number().int().min(0).default(0).describe("Pagination offset for calendars."),
   groupId: z.string().optional().describe("Optional calendar group ID to filter by."),
 });
 
@@ -14,8 +12,6 @@ const ListEventsInput = z.object({
   calendarId: z.string().optional().describe("Optional calendar ID to restrict events."),
   startTime: z.string().optional().describe("Optional ISO-8601 lower bound for event start time."),
   endTime: z.string().optional().describe("Optional ISO-8601 upper bound for event end time."),
-  limit: z.number().int().min(1).max(100).default(20).describe("Maximum number of events to return."),
-  offset: z.number().int().min(0).default(0).describe("Pagination offset for events."),
 });
 
 const CreateEventInput = z.object({

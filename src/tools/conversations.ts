@@ -10,7 +10,6 @@ const SearchConversationsInput = z.object({
   assignedTo: z.string().optional().describe("Optional user ID assigned to the conversation."),
   status: z.string().optional().describe("Optional status filter such as open, unread, or closed."),
   limit: z.number().int().min(1).max(100).default(20).describe("Maximum number of conversations to return."),
-  offset: z.number().int().min(0).default(0).describe("Pagination offset for conversations."),
 });
 
 const GetConversationInput = z.object({
@@ -20,7 +19,6 @@ const GetConversationInput = z.object({
 const GetConversationMessagesInput = z.object({
   conversationId: z.string().min(1).describe("The conversation ID whose messages should be listed."),
   limit: z.number().int().min(1).max(100).default(20).describe("Maximum number of messages to return."),
-  offset: z.number().int().min(0).default(0).describe("Pagination offset for messages."),
 });
 
 const SendMessageInput = z.object({
@@ -72,9 +70,9 @@ export function registerConversationTools(server: McpServer, client: GhlClient) 
     "get_conversation_messages",
     "List messages in a GoHighLevel conversation.",
     GetConversationMessagesInput.shape,
-    async ({ conversationId, limit, offset }) =>
+    async ({ conversationId, limit }) =>
       withToolErrorHandling(`list messages for conversation ${conversationId}`, async () => {
-      const result = await client.getConversationMessages(conversationId, { limit, offset });
+      const result = await client.getConversationMessages(conversationId, { limit });
       const messages = result.messages ?? [];
       return formatToolResult(
         `Retrieved ${messages.length} message${messages.length === 1 ? "" : "s"} from conversation ${conversationId}.`,

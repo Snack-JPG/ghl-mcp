@@ -5,8 +5,6 @@ import { GhlClient } from "../client.js";
 import { formatToolResult, withToolErrorHandling } from "../types.js";
 
 const ListUsersInput = z.object({
-  limit: z.number().int().min(1).max(100).default(100).describe("Maximum number of users to return."),
-  offset: z.number().int().min(0).default(0).describe("Pagination offset for users."),
   role: z.string().optional().describe("Optional role filter."),
 });
 
