@@ -1,5 +1,5 @@
 {
-  "name": "@snackjpg/ghl-mcp",
+  "name": "ghl-mcp",
   "version": "1.0.0",
   "description": "GoHighLevel MCP server exposing CRM, pipeline, conversation, calendar, workflow, and user tools over stdio.",
   "license": "MIT",

@@ -1,6 +1,6 @@
 # GoHighLevel MCP Server
 
-`@snackjpg/ghl-mcp` is a Model Context Protocol server for GoHighLevel API v2. It exposes contacts, opportunities, conversations, calendars, workflows, and users as MCP tools over stdio so Claude Code, Cursor, Codex, OpenClaw, VS Code, and other MCP clients can work directly with GoHighLevel CRM data.
+`ghl-mcp` is a Model Context Protocol server for GoHighLevel API v2. It exposes contacts, opportunities, conversations, calendars, workflows, and users as MCP tools over stdio so Claude Code, Cursor, Codex, OpenClaw, VS Code, and other MCP clients can work directly with GoHighLevel CRM data.
 
 ## Features
 
@@ -31,7 +31,7 @@ node dist/index.js
 ### Run with `npx`
 
 ```bash
-npx -y @snackjpg/ghl-mcp
+npx -y ghl-mcp
 ```
 
 ## Configuration
@@ -53,14 +53,20 @@ Version: 2021-07-28
 
 ### Claude Code
 
-```bash
-claude mcp add gohighlevel -- node /absolute/path/to/ghl-mcp/dist/index.js
-```
-
-After publishing:
+> **Note:** `claude mcp add` registers a local server name — it doesn't download from a registry. The part after `--` is the actual command that runs the server.
 
 ```bash
-claude mcp add gohighlevel -- npx -y @snackjpg/ghl-mcp
+# After npm publish (recommended):
+claude mcp add gohighlevel --scope user \
+  --env GHL_API_TOKEN="your-token" \
+  --env GHL_LOCATION_ID="your-location-id" \
+  -- npx -y ghl-mcp
+
+# Local development (before publishing):
+claude mcp add gohighlevel --scope user \
+  --env GHL_API_TOKEN="your-token" \
+  --env GHL_LOCATION_ID="your-location-id" \
+  -- node /absolute/path/to/ghl-mcp/dist/index.js
 ```
 
 ### Cursor / VS Code / Codex style config
@@ -70,7 +76,7 @@ claude mcp add gohighlevel -- npx -y @snackjpg/ghl-mcp
   "mcpServers": {
     "gohighlevel": {
       "command": "npx",
-      "args": ["-y", "@snackjpg/ghl-mcp"],
+      "args": ["-y", "ghl-mcp"],
       "env": {
         "GHL_API_TOKEN": "your-token-here",
         "GHL_LOCATION_ID": "your-location-id"
