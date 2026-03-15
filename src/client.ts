@@ -126,35 +126,13 @@ export class GhlClient {
     return this.request("PUT", `/opportunities/${opportunityId}/status`, { body, includeLocationId: false });
   }
 
-  public async listPipelines(query?: Record<string, unknown>) {
-    const pipelinesResponse = await this.request<{ pipelines?: Pipeline[] }>(
+  public async listPipelines(_query?: Record<string, unknown>) {
+    // The list endpoint already returns stages for each pipeline
+    return this.request<{ pipelines?: Pipeline[] }>(
       "GET",
       "/opportunities/pipelines",
-      { query },
+      { query: {} },
     );
-
-    const pipelines = pipelinesResponse.pipelines ?? [];
-    const enrichedPipelines = await Promise.all(
-      pipelines.map(async (pipeline) => {
-        const stages = await this.getPipelineStages(pipeline.id);
-        return {
-          ...pipeline,
-          stages:
-            (stages as { stages?: unknown[]; pipeline?: { stages?: unknown[] } }).stages ??
-            (stages as { pipeline?: { stages?: unknown[] } }).pipeline?.stages ??
-            [],
-        };
-      }),
-    );
-
-    return {
-      ...pipelinesResponse,
-      pipelines: enrichedPipelines,
-    };
-  }
-
-  public async getPipelineStages(pipelineId: string) {
-    return this.request("GET", `/opportunities/pipelines/${pipelineId}`);
   }
 
   public async searchConversations(params: Record<string, unknown>) {
