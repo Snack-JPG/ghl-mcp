@@ -212,6 +212,111 @@ export class GhlClient {
     return this.request<{ user?: User }>("GET", `/users/${userId}`);
   }
 
+  public async listInvoices(query?: Record<string, unknown>) {
+    return this.request("GET", "/invoices/", { query: query ?? {} });
+  }
+
+  public async createInvoice(body: Record<string, unknown>) {
+    return this.request("POST", "/invoices/", { body });
+  }
+
+  public async listTransactions(query?: Record<string, unknown>) {
+    return this.request("GET", "/payments/transactions", { query: query ?? {} });
+  }
+
+  public async listOrders(query?: Record<string, unknown>) {
+    return this.request("GET", "/payments/orders", { query: query ?? {} });
+  }
+
+  public async listSubscriptions(query?: Record<string, unknown>) {
+    return this.request("GET", "/payments/subscriptions", { query: query ?? {} });
+  }
+
+  public async listSocialPosts(query?: Record<string, unknown>) {
+    return this.request("GET", `/social-media-posting/${this.locationId}/`, {
+      query,
+      includeLocationId: false,
+    });
+  }
+
+  public async createSocialPost(body: Record<string, unknown>) {
+    return this.request("POST", `/social-media-posting/${this.locationId}/`, {
+      body,
+      includeLocationId: false,
+    });
+  }
+
+  public async listSocialAccounts(query?: Record<string, unknown>) {
+    return this.request("GET", `/social-media-posting/${this.locationId}/accounts`, {
+      query,
+      includeLocationId: false,
+    });
+  }
+
+  public async getSocialStats(query?: Record<string, unknown>) {
+    return this.request("GET", `/social-media-posting/${this.locationId}/statistics`, {
+      query,
+      includeLocationId: false,
+    });
+  }
+
+  public async listForms(query?: Record<string, unknown>) {
+    return this.request("GET", "/forms/", { query: query ?? {} });
+  }
+
+  public async listFunnels(query?: Record<string, unknown>) {
+    return this.request("GET", "/funnels/funnel/list", { query: query ?? {} });
+  }
+
+  public async listFunnelPages(query?: Record<string, unknown>) {
+    return this.request("GET", "/funnels/page/list", { query: query ?? {} });
+  }
+
+  public async listTasks(contactId: string, query?: Record<string, unknown>) {
+    return this.request("GET", `/contacts/${contactId}/tasks`, {
+      query,
+      includeLocationId: false,
+    });
+  }
+
+  public async createTask(contactId: string, body: Record<string, unknown>) {
+    return this.request("POST", `/contacts/${contactId}/tasks`, {
+      body,
+      includeLocationId: false,
+    });
+  }
+
+  public async listProducts(query?: Record<string, unknown>) {
+    return this.request("GET", "/products/", { query: query ?? {} });
+  }
+
+  public async listProductPrices(productId: string, query?: Record<string, unknown>) {
+    return this.request("GET", `/products/${productId}/prices`, {
+      query,
+      includeLocationId: false,
+    });
+  }
+
+  public async listEmailTemplates(query?: Record<string, unknown>) {
+    return this.request("GET", "/emails/builder", { query: query ?? {} });
+  }
+
+  public async listEmailSchedules(query?: Record<string, unknown>) {
+    return this.request("GET", "/emails/schedule", { query: query ?? {} });
+  }
+
+  public async listCampaigns(query?: Record<string, unknown>) {
+    return this.request("GET", "/campaigns/", { query: query ?? {} });
+  }
+
+  public async listContracts(query?: Record<string, unknown>) {
+    return this.request("GET", "/documents/contracts", { query: query ?? {} });
+  }
+
+  public async sendContractLink(body: Record<string, unknown>) {
+    return this.request("POST", "/documents/contracts/send-link", { body });
+  }
+
   public getLocationId() {
     return this.locationId;
   }

@@ -1,10 +1,10 @@
 # GoHighLevel MCP Server
 
-`ghl-mcp` is a Model Context Protocol server for GoHighLevel API v2. It exposes contacts, opportunities, conversations, calendars, workflows, and users as MCP tools over stdio so Claude Code, Cursor, Codex, OpenClaw, VS Code, and other MCP clients can work directly with GoHighLevel CRM data.
+`ghl-mcp` is a Model Context Protocol server for GoHighLevel API v2. It exposes contacts, opportunities, conversations, calendars, workflows, users, invoices, payments, social, forms, funnels, tasks, products, emails, campaigns, and documents as MCP tools over stdio so Claude Code, Cursor, Codex, OpenClaw, VS Code, and other MCP clients can work directly with GoHighLevel CRM data.
 
 ## Features
 
-- 29 MCP tools covering the highest-value GoHighLevel CRM operations
+- 50 MCP tools covering high-value GoHighLevel CRM, billing, marketing, and operations workflows
 - Built on `@modelcontextprotocol/sdk` v1.x
 - Strict TypeScript configuration
 - Zod-validated tool inputs with descriptions on every field
@@ -141,6 +141,51 @@ npx @modelcontextprotocol/inspector node dist/index.js
 - `list_users`: List users in the configured location
 - `get_user`: Retrieve one user by ID
 
+### Invoices And Payments
+
+- `list_invoices`: List invoices
+- `create_invoice`: Create an invoice
+- `list_transactions`: List payment transactions
+- `list_orders`: List payment orders
+- `list_subscriptions`: List subscriptions
+
+### Social
+
+- `list_social_posts`: List social posts
+- `create_social_post`: Create or schedule a social post
+- `list_social_accounts`: List connected social accounts
+- `get_social_stats`: Retrieve social statistics
+
+### Forms And Funnels
+
+- `list_forms`: List forms
+- `list_funnels`: List funnels
+- `list_funnel_pages`: List funnel pages
+
+### Tasks
+
+- `list_tasks`: List tasks for a contact
+- `create_task`: Create a task for a contact
+
+### Products
+
+- `list_products`: List products
+- `list_product_prices`: List prices for a product
+
+### Emails
+
+- `list_email_templates`: List email templates
+- `list_email_schedules`: List scheduled emails
+
+### Campaigns
+
+- `list_campaigns`: List campaigns
+
+### Documents
+
+- `list_contracts`: List contracts or documents
+- `send_contract_link`: Send a contract link for signing
+
 ## Development
 
 ```bash
@@ -158,9 +203,17 @@ src/
 ├── types.ts
 └── tools/
     ├── calendars.ts
+    ├── campaigns.ts
     ├── contacts.ts
     ├── conversations.ts
+    ├── documents.ts
+    ├── emails.ts
+    ├── forms.ts
+    ├── invoices.ts
     ├── opportunities.ts
+    ├── products.ts
+    ├── social.ts
+    ├── tasks.ts
     ├── users.ts
     └── workflows.ts
 ```
