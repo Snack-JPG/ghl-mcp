@@ -13,8 +13,8 @@ const CreateTaskInput = z.object({
   contactId: z.string().min(1).describe("The contact ID the task should be attached to."),
   title: z.string().min(1).describe("Task title."),
   body: z.string().optional().describe("Optional task description or notes."),
-  dueDate: z.string().optional().describe("Optional due date or datetime in ISO-8601 format."),
-  completed: z.boolean().optional().describe("Optional initial completion state."),
+  dueDate: z.string().describe("Due date or datetime in ISO-8601 format (e.g. 2026-03-20T10:00:00.000Z)."),
+  completed: z.boolean().default(false).describe("Initial completion state."),
   assignedTo: z.string().optional().describe("Optional user ID to assign the task to."),
 });
 
