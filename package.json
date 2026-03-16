@@ -1,8 +1,13 @@
 {
   "name": "ghl-mcp",
   "version": "1.0.0",
-  "description": "GoHighLevel MCP server exposing CRM, pipeline, conversation, calendar, workflow, and user tools over stdio.",
+  "mcpName": "io.github.snack-jpg/ghl-mcp",
+  "description": "GoHighLevel MCP Server — 50 tools for contacts, pipelines, conversations, calendars, workflows, invoices, social, forms, tasks, products, emails, campaigns, documents.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Snack-JPG/ghl-mcp.git"
+  },
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -24,10 +29,15 @@
   },
   "keywords": [
     "mcp",
+    "mcp-server",
     "model-context-protocol",
     "gohighlevel",
     "leadconnector",
-    "crm"
+    "crm",
+    "claude",
+    "claude-code",
+    "cursor",
+    "ai-tools"
   ],
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.27.1",
